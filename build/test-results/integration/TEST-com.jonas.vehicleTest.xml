@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.jonas.vehicleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-02-05T21:27:07" hostname="mntbptnp0382459.local" time="0.001">
-  <properties/>
-  <testcase name="IMakeAvalidAPIReQuestAndReceive200" classname="com.jonas.vehicleTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
