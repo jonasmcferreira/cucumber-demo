@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.jonas'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    cucumberVersion = '4.7.1'
+    restAssuredVersion = '4.1.2'
+}
+
+dependencies {
+    // This is to allow cucumber to run in SpringBootTest
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-picocontainer:${cucumberVersion}"
+
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+mainClassName = ''
+
+
+test {
+    outputs.upToDateWhen { false }
+    reports {
+        junitXml.enabled = true
+        html.enabled = true
+    }
+    testLogging {
+        // This can be useful for testing on the command line
+        events = ['PASSED', 'FAILED', 'SKIPPED']
+        exceptionFormat = 'full'
+    }
+}
+
+
+// ===========================
+// TASKS
+// ===========================
+
+task behaviour(type: Test) {
+    dependsOn assemble, compileTestJava
+
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty',
+                    '--glue', 'com.jonas',
+                    '--strict',
+                    'src/test/resources']
+        }
+    }
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
